@@ -1,14 +1,15 @@
 # Individual-based simulations of Fisherian sexual selection
-An individual-based model of Fisherian sexual selection. See [Pomiankowski et al (1991) Evolution]( https://doi.org/10.2307/2409889) allowing for costly preferences and mutation biases 
+An individual-based model of Fisherian sexual selection. See [Pomiankowski et al (1991) Evolution]( https://doi.org/10.2307/2409889), allowing for costly preferences and mutation biases 
 
 ## How to compile
-Open a Unix shell (either on a Linux system, MSYS2 on Windows or the terminal on Mac OS X)
+Open a Unix shell (either on a Linux system, MSYS2 on Windows or the terminal on Mac OS X). 
+Assuming one has downloaded the files to one's home directory (`~`), we have
 
-    cd fisher_sexsel/src/ibm
+    cd ~/fisher_sexsel/
     make
 
 ## How to run
-    cd fisher_sexsel/src/ibm
+    cd ~/fisher_sexsel/
     ./run_single_simulation.sh
 
 ## Vary parameters
