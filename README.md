@@ -12,6 +12,8 @@ Assuming one has downloaded the files to one's home directory (`~`), we have
     cd ~/fisher_sexsel/
     ./run_single_simulation.sh
 
+this will produce an output file (typically called `output.csv`) with means, variances and covariances. The separator is a semicolon, so when plotting in `R` take care to use `read_delim` with the correct arguments.
+
 ## Vary parameters
 Edit the file `run_single_simulation.sh` and look at the function `initArguments()` in the c++ file.
 to check which parameter is which.
