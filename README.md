@@ -5,11 +5,11 @@ An individual-based model of Fisherian sexual selection. See [Pomiankowski et al
 Open a Unix shell (either on a Linux system, MSYS2 on Windows or the terminal on Mac OS X). 
 Assuming one has downloaded the files to one's home directory (`~`), we have
 
-    cd ~/fisher_sexsel/
+    cd ~/fisher_sexsel/src/ibm/
     make
 
 ## How to run
-    cd ~/fisher_sexsel/
+    cd ~/fisher_sexsel/src/ibm/
     ./run_single_simulation.sh
 
 this will produce an output file (typically called `output.csv`) with means, variances and covariances. The separator is a semicolon, so when plotting in `R` take care to use `read_delim` with the correct arguments.
