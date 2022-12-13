@@ -42,9 +42,9 @@ const int N = 5000; // population size
 const int N_mate_sample = 10; // number of mates sampled
 const int clutch_size = 10; // number of offspring produced
 
-const double init_t = 0.0; // initial value for ornament
-const double init_p = 0.0; // initial value for preference
-double a = 1.0; // choice slope
+double init_t = 0.0; // initial value for ornament
+double init_p = 0.0; // initial value for preference
+double a = 1.0; // efficacy of sexual selection
 double b = 0.5; // cost of preference 
 double c = 0.5; // cost of trait
 double biast = 0; // mutation bias 
@@ -53,11 +53,22 @@ double mu_p 	  = 0.05;            // mutation rate preference
 double mu_t 	  = 0.05;            // mutation rate ornament
 double sdmu_p         = 0.4;			 // standard deviation mutation stepsize
 double sdmu_t         = 0.4;			 // standard deviation mutation stepsize
+                                         //
 const double NumGen = 150000; // number of generations
 const int skip = 10; // n generations interval before data is printed
 double sexlimp = 0; // degree of sex-limited expression in p,t
 double sexlimt = 0;
+
+// default name of the output file
+std::string file_name = "output.csv";
+
+// preference function:
+// 0: open-ended preferences
+// 1: absolute
+// 2: relative
 int pref = 0;
+
+// statistics variables
 double meanornsurv = 0;
 
 int popsize = N; // population size between 
@@ -68,10 +79,10 @@ int Nfemales = N / 2, Nmales = N / 2;
 int msurvivors = 0;
 int fsurvivors = 0;
 
+// TODO: change this to account 4 separate-sex organisms
 int father_eggs[N];
 int mother_eggs[N];
 
-std::string file_name = "output.csv";
 
 // the components of an actual individual
 struct Individual
@@ -85,8 +96,18 @@ struct Individual
 
 // generate the population
 typedef Individual Population[N];
+
+// declare various arrays of N individuals 
 Population Females, Males, FemaleSurvivors, MaleSurvivors;
+
+// make an array to store the index values of the parents
+// to generate offspring (rather than to make an array with lots of
+// offspring an array with lots of indices is cheaper).
 int Parents[N*clutch_size][2]; 
+
+
+// declaring parameters and arrays done, now let's move
+// on to declaring functions
 
 // function which obtains arguments from the command line
 // for definitions of the various parameters see top of the file
@@ -118,35 +139,38 @@ void mutate(double &G, double mu, double sdmu, double bias=0.0)
 
     G+=uniform(rng_r) < mu ? 
         mutational_effect_distribution(rng_r) : 0.0;
-}
+} // end mutate()
 
 // write the parameters to the DataFile
 void WriteParameters(std::ofstream &DataFile)
 {
 	DataFile << std::endl
 		<< std::endl
-		<< "type:;" << "gonochorist_fisherian" << ";" << std::endl
-		<< "popsize_init:;" << N << ";" << std::endl
-		<< "n_mate_sample:;" << N_mate_sample << ";"<< std::endl
-		<< "init_t:;" << init_t << ";"<< std::endl
-		<< "init_p:;" << init_p << ";"<< std::endl
-		<< "a:;" <<  a << ";"<< std::endl
-		<< "b:;" <<  b << ";"<< std::endl
-		<< "c:;" <<  c << ";"<< std::endl
-		<< "pref:;" <<  pref << ";"<< std::endl
-		<< "mu_p:;" <<  mu_p << ";"<< std::endl
-		<< "mu_t:;" <<  mu_t << ";"<< std::endl
-		<< "mu_std_p:;" <<  sdmu_p << ";"<< std::endl
-		<< "mu_std_t:;" <<  sdmu_t << ";"<< std::endl
-		<< "biast:;" <<  biast << ";"<< std::endl
-		<< "sexlimp:;" <<  sexlimp << ";"<< std::endl
-		<< "sexlimt:;" <<  sexlimt << ";"<< std::endl
-		<< "seed:;" << seed << ";"<< std::endl;
-}
+		<< "type;" << "gonochorist_fisherian" << ";" << std::endl
+		<< "popsize_init;" << N << ";" << std::endl
+		<< "n_mate_sample;" << N_mate_sample << ";"<< std::endl
+		<< "init_t;" << init_t << ";"<< std::endl
+		<< "init_p;" << init_p << ";"<< std::endl
+		<< "a;" <<  a << ";"<< std::endl
+		<< "b;" <<  b << ";"<< std::endl
+		<< "c;" <<  c << ";"<< std::endl
+		<< "pref;" <<  pref << ";"<< std::endl
+		<< "mu_p;" <<  mu_p << ";"<< std::endl
+		<< "mu_t;" <<  mu_t << ";"<< std::endl
+		<< "mu_std_p;" <<  sdmu_p << ";"<< std::endl
+		<< "mu_std_t;" <<  sdmu_t << ";"<< std::endl
+		<< "biast;" <<  biast << ";"<< std::endl
+		<< "sexlimp;" <<  sexlimp << ";"<< std::endl
+		<< "sexlimt;" <<  sexlimt << ";"<< std::endl
+		<< "seed;" << seed << ";"<< std::endl;
+} // end WriteParameters()
 
 // initialize all the phenotypes
 void Init()
 {
+    //++i;  prefix: it immediately adds 1
+    //i++;  postfix: only adds 1 after statement has completed
+
 	// initialize the whole populatin
 	for (int i = 0; i < Nfemales; ++i)
 	{
@@ -180,8 +204,10 @@ void Init()
 // create an offspring 
 void Create_Kid(int mother, int father, Individual &kid)
 {
-	assert(mother >= 0 && mother < fsurvivors);
-	assert(father >= 0 && father < msurvivors);
+	assert(mother >= 0);
+    assert(mother < fsurvivors);
+	assert(father >= 0); 
+    assert(father < msurvivors);
 
     // inherit ornament
 	kid.t[0] = FemaleSurvivors[mother].t[segregator(rng_r)];
@@ -574,12 +600,15 @@ void WriteDataHeaders(std::ofstream &DataFile)
 // the core part of the code
 int main(int argc, char ** argv)
 {
+    // initialize parameters based on command line arguments
 	initArguments(argc, argv);
 
     // initialize output file
     std::ofstream output_file(file_name.c_str());
 
 	WriteDataHeaders(output_file);
+
+    // setting up the population etc
 	Init();
 
 	for (generation = 0; generation <= NumGen; ++generation)

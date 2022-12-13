@@ -1,9 +1,10 @@
 # Individual-based simulations of Fisherian sexual selection
 An individual-based model of Fisherian sexual selection. See [Pomiankowski et al (1991) Evolution]( https://doi.org/10.2307/2409889), allowing for costly preferences and mutation biases 
 
+Open a Unix shell (either on a Linux system, MSYS2 on Windows or the terminal on Mac OS X). For UExeter users, best is to use MobaXterm and move the c++ files to the rstudio server.
+
 ## How to compile
-Open a Unix shell (either on a Linux system, MSYS2 on Windows or the terminal on Mac OS X). 
-Assuming one has downloaded the files to one's home directory (`~`), we have
+Assuming one has downloaded the files to one's home directory (`~`), use the shell to:
 
     cd ~/fisher_sexsel/src/ibm/
     make
