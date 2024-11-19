@@ -105,13 +105,9 @@ typedef Individual Population[N];
 // declare various arrays of N individuals 
 Population Females, Males, FemaleSurvivors, MaleSurvivors;
 
-<<<<<<< HEAD
 // make an array to store the index values of the parents
 // to generate offspring (rather than to make an array with lots of
 // offspring an array with lots of indices is cheaper).
-=======
-// have a vector with parents 
->>>>>>> fe805f7c89d8ea99eb77adac71dbbc8ac291f939
 int Parents[N*clutch_size][2]; 
 
 
@@ -149,15 +145,9 @@ void mutate(double &G, double mu, double sdmu, double bias=0.0)
         // and as sd sdmu
         std::normal_distribution <double> mutational_effect_distribution(bias, sdmu);
 
-<<<<<<< HEAD
-    G+=uniform(rng_r) < mu ? 
-        mutational_effect_distribution(rng_r) : 0.0;
-} // end mutate()
-=======
         G += mutational_effect_distribution(rng_r);
     }
 }
->>>>>>> fe805f7c89d8ea99eb77adac71dbbc8ac291f939
 
 // write the parameters to the DataFile
 void WriteParameters(std::ofstream &DataFile)
@@ -638,7 +628,7 @@ int main(int argc, char ** argv)
     // write the headers to the data file
 	WriteDataHeaders(output_file);
 
-    // setting up the population etc
+    // initialize the population
 	Init();
 
     // loop through each generation
