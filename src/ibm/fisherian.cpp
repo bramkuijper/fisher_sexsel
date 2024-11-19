@@ -18,6 +18,8 @@
 #include <cassert>
 #include <random>
 
+
+
 // random number generators
 //
 // we need something to 'seed' our random
@@ -31,6 +33,9 @@ std::mt19937 rng_r(seed);
 
 // allocate a uniform [0,1] random number distribution
 std::uniform_real_distribution <double> uniform(0.0,1.0);
+
+// allocate a bernoulli distribution for allele 
+// segregration during inheritance
 std::bernoulli_distribution segregator(0.5);
 
 
@@ -100,9 +105,13 @@ typedef Individual Population[N];
 // declare various arrays of N individuals 
 Population Females, Males, FemaleSurvivors, MaleSurvivors;
 
+<<<<<<< HEAD
 // make an array to store the index values of the parents
 // to generate offspring (rather than to make an array with lots of
 // offspring an array with lots of indices is cheaper).
+=======
+// have a vector with parents 
+>>>>>>> fe805f7c89d8ea99eb77adac71dbbc8ac291f939
 int Parents[N*clutch_size][2]; 
 
 
@@ -133,13 +142,22 @@ void initArguments(int argc, char *argv[])
 // of sdmu and a certain mutational bias
 void mutate(double &G, double mu, double sdmu, double bias=0.0)
 {
-    // normal distribution with as mean value the bias
-    // and as sd sdmu
-    std::normal_distribution <double> mutational_effect_distribution(bias, sdmu);
+    // first check whether we actually need to mutate this allele
+    if (uniform(rng_r) < mu)
+    {
+        // normal distribution with as mean value the bias
+        // and as sd sdmu
+        std::normal_distribution <double> mutational_effect_distribution(bias, sdmu);
 
+<<<<<<< HEAD
     G+=uniform(rng_r) < mu ? 
         mutational_effect_distribution(rng_r) : 0.0;
 } // end mutate()
+=======
+        G += mutational_effect_distribution(rng_r);
+    }
+}
+>>>>>>> fe805f7c89d8ea99eb77adac71dbbc8ac291f939
 
 // write the parameters to the DataFile
 void WriteParameters(std::ofstream &DataFile)
@@ -202,7 +220,7 @@ void Init()
 } // end Init
 
 // create an offspring 
-void Create_Kid(int mother, int father, Individual &kid)
+void Create_Kid(int const mother, int const father, Individual &kid)
 {
 	assert(mother >= 0);
     assert(mother < fsurvivors);
@@ -212,12 +230,14 @@ void Create_Kid(int mother, int father, Individual &kid)
     // inherit ornament
 	kid.t[0] = FemaleSurvivors[mother].t[segregator(rng_r)];
     mutate(kid.t[0], mu_t, sdmu_t, -biast);
+
 	kid.t[1] = MaleSurvivors[father].t[segregator(rng_r)];
     mutate(kid.t[1], mu_t, sdmu_t, -biast);
 
     // inherit preference
 	kid.p[0] = FemaleSurvivors[mother].p[segregator(rng_r)];
     mutate(kid.p[0], mu_p, sdmu_p);
+
 	kid.p[1] = MaleSurvivors[father].p[segregator(rng_r)];
     mutate(kid.p[1], mu_p, sdmu_p);
 } // end Create_Kid
@@ -283,12 +303,14 @@ void Survive(std::ofstream &DataFile)
     // take the average of the surviving male trait value
     meanornsurv /= msurvivors;
 
-    // TODO
-    assert(fsurvivors > 0 && fsurvivors < popsize);
-    assert(msurvivors > 0 && msurvivors < popsize);
-}
+    assert(fsurvivors > 0);
+    assert(fsurvivors < popsize);
+    assert(msurvivors > 0);
+    assert(msurvivors < popsize);
+} // end survival stage
 
 // mate choice
+
 void Choose(double p, int &father) 
 {
 	// make arrays that hold the values of the sample of assessed males
@@ -308,6 +330,10 @@ void Choose(double p, int &father)
 	{
 		// get a random surviving male
 		int random_mate = msurvivor_sampler(rng_r);
+
+        assert(random_mate >= 0);
+
+        assert(random_mate < msurvivors);
 
         // obtain a male's ornament
 		double trait = MaleSurvivors[random_mate].t_expr;
@@ -335,6 +361,12 @@ void Choose(double p, int &father)
                 double reltr = trait - meanornsurv;
                 po = exp(-a*(reltr - p)*(reltr - p));
             } break;
+
+            default:
+            {
+                std::cout << "this should not happen, wrong preference value." << std::endl;
+                exit(1);
+            }
         }
 
         // prevent the exponential of going to infinity
@@ -350,7 +382,7 @@ void Choose(double p, int &father)
 		sumFitness=Fitness[j];
 
 		Candidates[j] = random_mate;
-	} 
+	} // end for (int j = 0 
 
     // sample from the cumulative distribution
 	double r = uniform(rng_r)*sumFitness;
@@ -373,7 +405,6 @@ void Choose(double p, int &father)
     assert(father >= 0 && father < msurvivors);
 
 } // end ChooseMates
-
 // produce the next generation
 void NextGen()
 {
@@ -392,7 +423,7 @@ void NextGen()
         {
             mother_eggs[i] = 0;
         }
-    }
+    } // end if(do_stats)
 
     // let the surviving females choose a mate
 	for (int i = 0; i < fsurvivors; ++i)
@@ -421,7 +452,7 @@ void NextGen()
             Parents[offspring][1] = Father;
             ++offspring;
         }
-	}
+	} // end for (int i = 0; i < fsurvivors
 
     int sons = 0;
     int daughters = 0;
@@ -431,7 +462,7 @@ void NextGen()
     // offspring produced
     popsize = offspring < N ? offspring : N;
 
-    std::uniform_int_distribution <double> offspring_sampler(0, offspring - 1);
+   std::uniform_int_distribution <int> offspring_sampler(0, offspring - 1);
 
     // replace the next generation
     for (int i = 0; i < popsize; ++i)
@@ -443,6 +474,16 @@ void NextGen()
 
         // randomly sample an offspring to replace the population
         Create_Kid(Parents[random_offspring][0], Parents[random_offspring][1], Kid);
+            
+        double t = 0.5 * ( Kid.t[0] + Kid.t[1]);
+        double p = 0.5 * ( Kid.p[0] + Kid.p[1]);
+
+        Kid.t_expr = t; 
+        Kid.p_expr = p; 
+
+        assert(random_offspring >= 0);
+        assert(random_offspring < N*clutch_size);
+
 
         assert(Parents[random_offspring][0] >= 0); 
         assert(Parents[random_offspring][0] < fsurvivors);
@@ -452,23 +493,11 @@ void NextGen()
         // it's a boy
         if (uniform(rng_r) < 0.5)
         {
-            Males[sons] = Kid;
-    
-            double t = 0.5 * ( Males[sons].t[0] + Males[sons].t[1]);
-            double p = 0.5 * ( Males[sons].p[0] + Males[sons].p[1]);
-            Males[sons].t_expr = t; 
-            Males[sons].p_expr = p; 
-            ++sons;
+            Males[sons++] = Kid;
         }
         else
         {
-            Females[daughters] = Kid;
-
-            double t = 0.5 * ( Females[daughters].t[0] + Females[daughters].t[1]);
-            double p = 0.5 * ( Females[daughters].p[0] + Females[daughters].p[1]);
-            Females[daughters].t_expr = t; 
-            Females[daughters].p_expr = p;
-            ++daughters;
+            Females[daughters++] = Kid;
         }
     }
 
@@ -606,17 +635,24 @@ int main(int argc, char ** argv)
     // initialize output file
     std::ofstream output_file(file_name.c_str());
 
+    // write the headers to the data file
 	WriteDataHeaders(output_file);
 
     // setting up the population etc
 	Init();
 
+    // loop through each generation
 	for (generation = 0; generation <= NumGen; ++generation)
 	{
+        // decide whether we want to write out stats or not
 		do_stats = generation % skip == 0;
 
+        // individuals survive (or not)
 		Survive(output_file);
         
+        // individuals reproduce (or not)
+        // female choice, so all females reproduce (by definition)
+        // but not all males.
         NextGen();
         
         if (do_stats)
