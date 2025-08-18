@@ -1,20 +1,24 @@
-# executable name
-EXE=fisherian.exe
+# makefile for object-oriented simulation
+# of Fisherian sexual selection
 
-# c++ files needed to build
-CPP=fisherian.cpp
+# name of executable
+EXE=fisher_sexsel.exe
 
-# which compiler?
+# compiler command
 CXX=g++
 
-# any flags that the compiler uses?
-CXXFLAGS=-Wall -O3
+# compiler flags
+CXXFLAGS=-Wall -Wconversion -std=c++20 -O3
 
-# actually building the executable, this will run
-# if you type 'make'
-$(EXE) : $(CPP)
+# required C++ files
+CPP=individual.cpp fisher.cpp main.cpp
+
+# required header files
+HPP=individual.hpp fisher.hpp parameters.hpp
+
+$(EXE) : $(CPP) $(HPP)
 	$(CXX) $(CXXFLAGS) -o $(EXE) $(CPP)
 
-# type 'make clean' in case you want to remove the exe
-clean : 
+clean :
 	rm -rf $(EXE)
+

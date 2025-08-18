@@ -15,7 +15,7 @@
 biast <- c(seq(0.5,0.9,0.1),0.99)
 
 # efficacy of sexual selection
-a <- 1.0
+a <- 0.0
 
 # cost of female preference
 b <- c(0.0025)
@@ -25,7 +25,7 @@ c <- c(0.5)
 
 # initial values of t, p
 init_t <- 0.0
-init_p <- 1.0
+init_p <- -1.0
 
 # per-allele, per-generation 
 # mutation probabilities
