@@ -15,7 +15,7 @@
 biast <- c(seq(0.5,0.9,0.1),0.99)
 
 # efficacy of sexual selection
-a <- 0.0
+a <- 1.0
 
 # cost of female preference
 b <- c(0.0025)
