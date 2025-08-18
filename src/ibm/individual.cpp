@@ -42,6 +42,11 @@ Individual::Individual(Individual const &mother,
 
             // decide whether we need to add or subtract
             p[allele_idx] += unif(rng_r) < 0.5 ? -increment_p : increment_p;
+
+            if (params.only_positive && p[allele_idx] < 0.0)
+            {
+                p[allele_idx] = 0.0;
+            }
         }
 
         if (unif(rng_r) < params.mu_t)
@@ -50,6 +55,11 @@ Individual::Individual(Individual const &mother,
 
             // decide whether we need to add or subtract
             t[allele_idx] += unif(rng_r) < params.biast ? -increment_t : increment_t;
+
+            if (params.only_positive && t[allele_idx] < 0.0)
+            {
+                t[allele_idx] = 0.0;
+            }
         }
     } // end for
 

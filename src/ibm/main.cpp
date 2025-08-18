@@ -14,7 +14,8 @@ int main(int arc, char *argv[])
 	parameters.max_mut_t = std::stod(argv[8]);
     parameters.init_p = std::stod(argv[9]);
     parameters.init_t = std::stod(argv[10]);
-    parameters.file_name = argv[11];
+    parameters.only_positive = std::stoi(argv[11]);
+    parameters.file_name = argv[12];
 
     Fisher f{parameters};
 

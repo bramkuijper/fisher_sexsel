@@ -171,6 +171,7 @@ void Fisher::reproduce()
     {
         unsigned int mother_id{female_sampler(rng_r)};
 
+        // perform mate choice
         unsigned int father_id{choose(females[mother_id])};
 
         assert(mother_id < females.size());
@@ -288,6 +289,7 @@ void Fisher::write_parameters()
         << "a;" << par.a << ";" << std::endl
         << "b;" << par.b << ";" << std::endl
         << "c;" << par.c << ";" << std::endl
+        << "only_positive;" << par.only_positive << ";" << std::endl
         << "init_t;" << par.init_t << ";" << std::endl
         << "init_p;" << par.init_p << ";" << std::endl;
 }

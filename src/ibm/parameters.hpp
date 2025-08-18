@@ -45,6 +45,9 @@ class Parameters
 
         double init_p{1.0};
 
+        // bounds on character value
+        bool only_positive{false};
+
         std::string file_name{"sim_fisher.txt"};
 };
 

@@ -25,7 +25,7 @@ c <- c(0.5)
 
 # initial values of t, p
 init_t <- 0.0
-init_p <- -1.0
+init_p <- 1.0
 
 # per-allele, per-generation 
 # mutation probabilities
@@ -37,7 +37,12 @@ mu_t <- 0.05
 sdmu_p <- 0.4
 sdmu_t <- 0.4
 
-nrep =20 
+# number of replicate simulations for each unique
+# parameter combination
+nrep <- 20 
+
+# whether traits should only attain positive values
+only_positive <- T
 
 # generate unique output files that are not easily
 # overwritten when generating (and running) a subsequent
@@ -83,6 +88,7 @@ for (rep_i in 1:nrep)
                                     sdmu_t,
                                     init_p,
                                     init_t,
+                                    as.numeric(only_positive),
                                     file_name_i)
 
                     # append to batch file contents
