@@ -31,6 +31,11 @@ class Parameters
         // 0.5: no bias, > 0.5 mutations which result in smaller t more likely
         double biast{0.5};
 
+        // whether mutation bias is always negative (if true)
+        // or whether sign of the bias depends on the current trait value
+        // (so that biases move the trait towards trait values of opposite sign)
+        bool bias_negative{false};
+
         // efficacy of sexual selection (see Pomiankowski et al 1991 Evolution)
         double a{1.0};
 

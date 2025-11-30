@@ -42,7 +42,7 @@ sdmu_t <- 0.4
 nrep <- 20 
 
 # whether traits should only attain positive values
-only_positive <- T
+only_positive <- F
 
 # generate unique output files that are not easily
 # overwritten when generating (and running) a subsequent

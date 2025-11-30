@@ -290,6 +290,7 @@ void Fisher::write_parameters()
         << "b;" << par.b << ";" << std::endl
         << "c;" << par.c << ";" << std::endl
         << "only_positive;" << par.only_positive << ";" << std::endl
+        << "bias_negative;" << par.bias_negative << ";" << std::endl
         << "init_t;" << par.init_t << ";" << std::endl
         << "init_p;" << par.init_p << ";" << std::endl;
 }

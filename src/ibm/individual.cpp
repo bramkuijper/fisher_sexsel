@@ -53,8 +53,22 @@ Individual::Individual(Individual const &mother,
         {
             double increment_t{params.max_mut_t * unif(rng_r)};
 
-            // decide whether we need to add or subtract
-            t[allele_idx] += unif(rng_r) < params.biast ? -increment_t : increment_t;
+            if (params.bias_negative)
+            {
+                // decide whether we need to add or subtract
+                t[allele_idx] += unif(rng_r) < params.biast ? -increment_t : increment_t;
+            }
+            else
+            {
+                if (t[allele_idx] > 0)
+                {
+                    t[allele_idx] += unif(rng_r) < params.biast ? -increment_t : increment_t;
+                }
+                else
+                {
+                    t[allele_idx] += unif(rng_r) < params.biast ? increment_t : -increment_t;
+                }
+            }
 
             if (params.only_positive && t[allele_idx] < 0.0)
             {
