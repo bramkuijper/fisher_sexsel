@@ -54,6 +54,7 @@ jsonstuff <- '[
     }
 ]
 '
+file.name <- "sim_fisher_18082025_104029_1"
 
 if (!exists("file.name"))
 {
@@ -110,9 +111,9 @@ for (plot_struct_idx in 1:plot.structure.l)
     {
         yvar_name <- make.var.name(yvar)
         yvar_values <- paste0(yvar_name,"_values")
-
+        
         sub.data <- pivot_longer(data=data.tibble
-                ,cols=yvar
+                ,cols=all_of(yvar)
                 ,names_to=yvar_name
                 ,values_to=yvar_values)
 

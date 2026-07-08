@@ -152,6 +152,8 @@ void Fisher::reproduce()
     // the previous generation
     offspring.clear();
 
+    // check whether population is not extinct
+    // if extinct, finish the simulation
     if (females.size() < 1 
             ||
             males.size() < 1)

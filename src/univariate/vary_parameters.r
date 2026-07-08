@@ -12,7 +12,7 @@
 # that are accepted by the simulation
 
 # bias on t
-biast <- c(seq(0.5,0.9,0.1),0.99)
+biast <- c(seq(0.5,0.95,0.05),0.99)
 
 # efficacy of sexual selection
 a <- 1.0
@@ -39,7 +39,7 @@ sdmu_t <- 0.4
 
 # number of replicate simulations for each unique
 # parameter combination
-nrep <- 20 
+nrep <- 10 
 
 # whether traits should only attain positive values
 only_positive <- F
