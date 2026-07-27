@@ -54,7 +54,7 @@ void Fisher::survival()
         // calculate male phenotype
         t = 0.5 * (male_iterator->t[0] + male_iterator->t[1]);
 
-        psurvive = exp(-par.c * t * t);
+        psurvive = par.baseline_survival + (1.0 - par.baseline_survival) * exp(-par.c * t * t);
 
         if (uniform(rng_r) > psurvive) // calculate probability individual dies
         {
@@ -76,7 +76,7 @@ void Fisher::survival()
     {
         p = 0.5 * (female_iterator->p[0] + female_iterator->p[1]);
 
-        psurvive = exp(-par.b * p * p);
+        psurvive = par.baseline_survival + (1.0 - par.baseline_survival) * exp(-par.b * p * p);
 
         if (uniform(rng_r) > psurvive) // calculate probability individual dies
         {
@@ -282,6 +282,7 @@ void Fisher::write_parameters()
         << "seed;" << seed << ";" << std::endl
         << "N;" << par.N << ";" << std::endl
         << "max_generation;" << par.max_generation << ";" << std::endl
+        << "baseline_survivale;" << par.baseline_survival << ";" << std::endl
         << "n_males_sampled;" << par.n_males_sampled << ";" << std::endl
         << "mu_t;" << par.mu_t << ";" << std::endl
         << "mu_p;" << par.mu_p << ";" << std::endl

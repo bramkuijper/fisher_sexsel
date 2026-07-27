@@ -54,7 +54,6 @@ jsonstuff <- '[
     }
 ]
 '
-file.name <- "sim_fisher_18082025_104029_1"
 
 if (!exists("file.name"))
 {

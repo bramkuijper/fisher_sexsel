@@ -12,16 +12,16 @@
 # that are accepted by the simulation
 
 # bias on t
-biast <- c(seq(0.5,0.95,0.05),0.99)
+biast <- c(0.5) #c(seq(0.5,0.95,0.05),0.99)
 
 # efficacy of sexual selection
 a <- 1.0
 
 # cost of female preference
-b <- c(0.0025)
+b <- c(0.01,0.02,0.05,0.1)
 
 # cost of male ornament
-c <- c(0.5)
+c <- c(0.02,0.05,0.1)
 
 # initial values of t, p
 init_t <- 0.0
@@ -36,6 +36,9 @@ mu_t <- 0.05
 # maximum mutational stepsize in p, t
 sdmu_p <- 0.4
 sdmu_t <- 0.4
+
+# baseline survival to avoid extinctions
+baseline_survival <- 0.05
 
 # number of replicate simulations for each unique
 # parameter combination
@@ -89,6 +92,7 @@ for (rep_i in 1:nrep)
                                     init_p,
                                     init_t,
                                     as.numeric(only_positive),
+                                    baseline_survival,
                                     file_name_i)
 
                     # append to batch file contents
