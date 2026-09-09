@@ -38,7 +38,7 @@ sdmu_p <- 0.4
 sdmu_t <- 0.4
 
 # baseline survival to avoid extinctions
-baseline_survival <- 0.05
+baseline_survival <- 0.0
 
 # number of replicate simulations for each unique
 # parameter combination

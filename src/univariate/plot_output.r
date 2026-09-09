@@ -162,10 +162,10 @@ for (plot_struct_idx in 1:plot.structure.l)
 
 title <- ""
 
-if (exists("params") && "sf" %in% names(params))
+if (exists("params"))
 {
     title <- paste0(
-            "survival: ",params["sf"],", toptf: ",params["toptf"])
+            "a: ",params["a"],", b: ",params["b"],", c: ",params["c"])
 }
 
 wrap_plots(plot.list,ncol=1) + plot_annotation(

@@ -48,7 +48,7 @@ class Parameters
         // initial values:
         double init_t{0.0};
 
-        double baseline_survival{0.05};
+        double baseline_survival{0.0};
 
         double init_p{1.0};
 
