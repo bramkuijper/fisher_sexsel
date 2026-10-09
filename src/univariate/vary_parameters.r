@@ -18,10 +18,13 @@ biast <- c(0.5) #c(seq(0.5,0.95,0.05),0.99)
 a <- 1.0
 
 # cost of female preference
-b <- c(0.01,0.02,0.05,0.1)
+b <- c(0.05)
 
 # cost of male ornament
-c <- c(0.02,0.05,0.1)
+c <- c(0.05)
+
+# weber value, proportional to the constant k
+k <- c(0, 0.5, 1, 1.5)
 
 # initial values of t, p
 init_t <- 0.0
@@ -73,35 +76,39 @@ for (rep_i in 1:nrep)
         {
             for (c_i in c)
             {
-                for (biast_i in biast)
+                for (k_i in k)
                 {
-                    counter <- counter + 1
-                    file_name_i <- paste0(output_file_prefix,"_",counter)
+                    for (biast_i in biast)
+                    {
+                        counter <- counter + 1
+                        file_name_i <- paste0(output_file_prefix,"_",counter)
 
-                    echo_str <- paste("echo",counter)
+                        echo_str <- paste("echo",counter)
 
-                    command_str <- paste(exe,
-                                    a_i,
-                                    b_i,
-                                    c_i,
-                                    biast_i,
-                                    mu_p,
-                                    mu_t,
-                                    sdmu_p,
-                                    sdmu_t,
-                                    init_p,
-                                    init_t,
-                                    as.numeric(only_positive),
-                                    baseline_survival,
-                                    file_name_i)
+                        command_str <- paste(exe,
+                                        a_i,
+                                        b_i,
+                                        c_i,
+                                        biast_i,
+                                        mu_p,
+                                        mu_t,
+                                        sdmu_p,
+                                        sdmu_t,
+                                        init_p,
+                                        init_t,
+                                        as.numeric(only_positive),
+                                        baseline_survival,
+                                        k_i,
+                                        file_name_i)
 
-                    # append to batch file contents
-                    batch_file_contents <- paste0(batch_file_contents
-                            ,"\n"
-                            ,echo_str
-                            ,"\n"
-                            ,command_str)
-                } # end for biast
+                        # append to batch file contents
+                        batch_file_contents <- paste0(batch_file_contents
+                                ,"\n"
+                                ,echo_str
+                                ,"\n"
+                                ,command_str)
+                    } # end for biast
+                } # end for k
             } # end for c_i
         } # end for b_i
     } # end for a_i

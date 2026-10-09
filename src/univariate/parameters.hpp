@@ -45,6 +45,9 @@ class Parameters
         // survival cost of male ornamentation
         double c{0.5};
 
+        // weber value, proportional to the weber constant
+        double k{0.0};
+
         // initial values:
         double init_t{0.0};
 

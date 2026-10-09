@@ -16,7 +16,8 @@ int main(int arc, char *argv[])
     parameters.init_t = std::stod(argv[10]);
     parameters.only_positive = std::stoi(argv[11]);
     parameters.baseline_survival = std::stod(argv[12]);
-    parameters.file_name = argv[13];
+    parameters.k = std::stod(argv[13]);
+    parameters.file_name = argv[14];
 
     Fisher f{parameters};
 

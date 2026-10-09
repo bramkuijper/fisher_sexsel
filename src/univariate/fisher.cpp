@@ -11,6 +11,7 @@ Fisher::Fisher(Parameters const &params) :
     par{params}, // copy over the parameters
     data_file{par.file_name}, // initialize the data file to write output to
     uniform{0.0,1.0}, // initialize the uniform distribution 
+    standard_normal{0.0,1.0}, // initialize the standard normal distribution 
     males{par.N/2, Individual(par)}, // initialize all females
     females{par.N/2, Individual(par)} // initialize all males
 {}
@@ -107,7 +108,7 @@ unsigned int Fisher::choose(Individual const &female)
     unsigned int current_male_idx;
 
     // aux variable to store male ornament
-    double t, male_score;
+    double t, male_score, zi;
 
     // store a vector with scores of each male
     std::vector <double> male_scores;
@@ -126,7 +127,9 @@ unsigned int Fisher::choose(Individual const &female)
 
         t = 0.5 * (males[current_male_idx].t[0] + males[current_male_idx].t[1]);
 
-        male_score = exp(par.a * p * t);
+        zi = standard_normal(rng_r) * t;
+
+        male_score = exp(par.a * p * (t + par.k * zi));
 
         male_scores.push_back(male_score);
         male_indices.push_back(current_male_idx);
@@ -292,6 +295,7 @@ void Fisher::write_parameters()
         << "a;" << par.a << ";" << std::endl
         << "b;" << par.b << ";" << std::endl
         << "c;" << par.c << ";" << std::endl
+        << "k;" << par.k << ";" << std::endl
         << "only_positive;" << par.only_positive << ";" << std::endl
         << "bias_negative;" << par.bias_negative << ";" << std::endl
         << "init_t;" << par.init_t << ";" << std::endl

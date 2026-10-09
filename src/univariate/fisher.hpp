@@ -36,6 +36,7 @@ class Fisher
 
         // uniform distribution
         std::uniform_real_distribution<double> uniform;
+        std::normal_distribution<double> standard_normal;
 
         // population of males, females and offspring
         std::vector <Individual> males{};
